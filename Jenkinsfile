@@ -8,9 +8,14 @@ node {
         stage('Test') {
             sh './jenkins/scripts/test.sh'
         }
+        stage('Manual Approval') {
+            input message: 'Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan eksekusi pipeline ke tahap Deploy atau klik "Abort" untuk menghentikan eksekusi pipeline)',
+                  ok: 'Proceed'
+        }
         stage('Deploy') {
             sh './jenkins/scripts/deliver.sh'
-            input message: 'Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan eksekusi pipeline ke tahap Deploy)'
+            echo 'Aplikasi berjalan selama 1 menit...'
+            sleep 60
             sh './jenkins/scripts/kill.sh'
         }
     }
